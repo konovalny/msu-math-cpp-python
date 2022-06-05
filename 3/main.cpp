@@ -62,7 +62,6 @@ class MyVector {
     for (auto it = begin; it != end; ++it) {
       this->push_back(*it);
     }
-    minimum_storage[0] = 0;
   }
 
 
