@@ -1,20 +1,19 @@
 CPPSOURCES := $(shell find . -name "*.cpp")
-CFLAGS := -Wall -Wextra -Wfloat-equal -O  -MMD -Wstrict-prototypes
-
-CXXFLAGS := $(CFLAGS) -std=c++17
+CFLAGS := -Wall -Wextra -Wfloat-equal -O  -MMD -Wstrict-prototypes  -g
 
 LDLIBS := -lm -lpthread -lstdc++
-all: LDFLAGS := -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize=null -fsanitize=bounds-strict -fstack-protector-all
+SOFLAGS := -fPIC -shared
 
 werror: all
-all: main
+all: myClass.so main.cpp
+	g++ $(CFLAGS) -L./ main.cpp -lmyClass -o ./prog
 
-main: $(CSOURCES:%.c=%.o) $(CPPSOURCES:%.cpp=%.o)
+myClass.so: myClass.cpp myClass.hpp
+	g++ $(CFLAGS) $(SOFLAGS) $(LDLIBS) myClass.cpp -o ./libmyClass.so
 
-DEPS := $(shell find -name "*.d")
--include $(DEPS)
 
 clean:
 	rm -f main
 	rm -f *.o
 	rm -f *.d
+	rm -f *.so
